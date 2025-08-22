@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Horas Extras</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(to right, #00c6ff, #0072ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      color: #0072ff;
+      margin-bottom: 20px;
+      font-size: 1.6em;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 1em;
+    }
+
+    button {
+      margin-top: 25px;
+      width: 100%;
+      padding: 12px;
+      background: #0072ff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #005fcc;
+    }
+
+    .result {
+      margin-top: 25px;
+      background: #f0f8ff;
+      padding: 15px;
+      border-radius: 10px;
+      color: #333;
+      font-size: 1em;
+    }
+
+    .highlight {
+      color: #34c759;
+      font-weight: bold;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+
+      h2 {
+        font-size: 1.4em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Calculadora de Horas Extras</h2>
+
+    <label for="salario">💰 Piso Salarial Mensal (R$):</label>
+    <input type="number" id="salario" placeholder="Ex: 2200" />
+
+    <label for="horas52">⏱️ Horas Extras 52%:</label>
+    <input type="number" id="horas52" placeholder="Ex: 6" />
+
+    <label for="horas100">📅 Horas 100%:</label>
+    <input type="number" id="horas100" placeholder="Ex: 8" />
+
+    <label for="noturno">🌙 Horas Adicional Noturno (20%):</label>
+    <input type="number" id="noturno" placeholder="Ex: 5" />
+
+    <button onclick="calcular()">Calcular</button>
+
+    <div class="result" id="resultado">
+      Preencha os campos acima para ver o resultado.
+    </div>
+  </div>
+
+  <script>
+    function calcular() {
+      var salario = parseFloat(document.getElementById('salario').value) || 0;
+      var horas52 = parseFloat(document.getElementById('horas52').value) || 0;
+      var horas100 = parseFloat(document.getElementById('horas100').value) || 0;
+      var noturno = parseFloat(document.getElementById('noturno').value) || 0;
+
+      var valorHora = salario / 220;
+
+      var valor52 = valorHora * 1.52 * horas52;
+      var valor100 = valorHora * 2.00 * horas100;
+      var valorNoturno = valorHora * 1.20 * noturno;
+
+      var totalExtras = valor52 + valor100 + valorNoturno;
+      var totalBruto = salario + totalExtras;
+
+      var adiantamento = salario * 0.40;
+      var descontos = totalBruto * 0.15;
+      var liquido = totalBruto - adiantamento - descontos;
+
+      var resultado = `
+        💼 <strong>Salário Base:</strong> R$ ${salario.toFixed(2).replace('.', ',')}<br><br>
+        ⏱️ <strong>Horas 52%:</strong> ${horas52}h → R$ ${valor52.toFixed(2).replace('.', ',')}<br>
+        📅 <strong>Horas 100%:</strong> ${horas100}h → R$ ${valor100.toFixed(2).replace('.', ',')}<br>
+        🌙 <strong>Horas Noturnas:</strong> ${noturno}h → R$ ${valorNoturno.toFixed(2).replace('.', ',')}<br><br>
+        💰 <strong>Total Extras:</strong> R$ ${totalExtras.toFixed(2).replace('.', ',')}<br>
+        🧾 <strong>Total Bruto:</strong> R$ ${totalBruto.toFixed(2).replace('.', ',')}<br>
+        💳 <strong>Adiantamento (40%):</strong> R$ ${adiantamento.toFixed(2).replace('.', ',')}<br>
+        📉 <strong>Descontos (15%):</strong> R$ ${descontos.toFixed(2).replace('.', ',')}<br><br>
+        ✅ <strong>Valor Líquido:</strong> <span class="highlight">R$ ${liquido.toFixed(2).replace('.', ',')}</span>
+      `;
+
+      document.getElementById('resultado').innerHTML = resultado;
+    }
+  </script>
+</body>
+</html>
